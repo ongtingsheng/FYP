@@ -10,11 +10,11 @@ class ClassModel
         $this->pdo = Database::getInstance()->getConnection();
     }
 
-    // Fetch all classes
+    // Fetch all classes 
     public function getAllClasses()
     {
         $sql = "SELECT c.class_id, c.class_name, c.subject, c.subject_code, c.capacity, c.first_day, c.last_day, c.start_time, c.end_time,
-                       (SELECT COUNT(*) FROM student_classes sc WHERE sc.classes_id = c.class_id) AS students_assigned, 
+                       (SELECT COUNT(*) FROM student_classes sc WHERE sc.class_id = c.class_id) AS students_assigned, 
                        CASE WHEN c.status = 1 THEN 'Active' ELSE 'Inactive' END AS status
                        FROM class c";
         $stmt = $this->pdo->query($sql);

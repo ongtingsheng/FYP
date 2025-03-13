@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['student_ids']) && is
     }
 
     // Check class capacity
-    $studentClass = new StudentClass();
+    $studentClass = new StudentClass(); 
     $classCapacity = $studentClass->getClassCapacity($class_id);
 
     if (!$classCapacity) {

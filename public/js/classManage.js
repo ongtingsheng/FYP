@@ -1,32 +1,34 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Attendance Modal Handling
-    document.querySelector(".view-btn").addEventListener("click", function () {
-        event.preventDefault();
-        document.getElementById("attendanceModal").style.display = "flex";
-    });
-    document.getElementById("closeAttendance").addEventListener("click", function () {
-        document.getElementById("attendanceModal").style.display = "none";
-    });
-    window.onclick = function (event) {
-        let modal = document.getElementById("attendanceModal");
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    };
+    let modal = document.getElementById("attendanceModal"); // Get the modal
+    if (!modal) {
+        console.error("Error: attendanceModal not found in the document.");
+        return; // Stop execution if modal is missing
+    }
 
-    // Add Class Modal Handling
-    document.getElementById("openAddClass").addEventListener("click", function () {
-        document.getElementById("addClassModal").style.display = "flex";
+    // Use event delegation to handle dynamically loaded elements
+    document.body.addEventListener("click", function (event) {
+        let viewBtn = event.target.closest(".view-btn");
+        if (viewBtn) {
+            event.preventDefault();
+            console.log("Button Clicked:", viewBtn); // Debugging
+            modal.style.display = "flex"; // Open modal
+        }
     });
-    document.getElementById("closeAddClass").addEventListener("click", function () {
-        document.getElementById("addClassModal").style.display = "none";
-    });
-    window.onclick = function (event) {
-        let modal = document.getElementById("addClassModal");
+
+    // Close modal button
+    let closeAttendance = document.getElementById("closeAttendance");
+    if (closeAttendance) {
+        closeAttendance.addEventListener("click", function () {
+            modal.style.display = "none";
+        });
+    }
+
+    // Close modal when clicking outside
+    window.addEventListener("click", function (event) {
         if (event.target === modal) {
             modal.style.display = "none";
         }
-    };
+    });
 
     // Edit Class Modal Handling
     document.querySelectorAll(".edit-btn").forEach(button => {
@@ -63,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
             modal.style.display = "none";
         }
     };
-    
+
 });
 
 

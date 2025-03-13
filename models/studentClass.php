@@ -57,11 +57,12 @@ class StudentClass
         return $stmt->fetchAll();
     }
 
-    public function markAttendance($student_id, $status, $class_id) {
+    public function markAttendance($student_id, $status, $class_id)
+    {
         $stmt = $this->pdo->prepare("
             UPDATE student_classes
             SET status = :status
-            WHERE student_id = :student_id AND class_id = :class_id
+            WHERE student_id = :student_id AND class_id = :class_id 
         ");
         $stmt->execute([
             ':student_id' => $student_id,
@@ -76,6 +77,46 @@ class StudentClass
         $stmt = $this->pdo->prepare("SELECT student_id FROM student_classes WHERE class_id = ?");
         $stmt->execute([$class_id]);
         return $stmt->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    // Generate a 6-digit random PIN and store it in the class table
+    public function generatePinCode($class_id)
+    {
+        try {
+            // Check if the class already has a PIN
+            $stmt = $this->pdo->prepare("SELECT pin_code FROM class WHERE class_id = :class_id");
+            $stmt->execute([':class_id' => $class_id]);
+            $existingPin = $stmt->fetchColumn();
+
+            if ($existingPin) {
+                return $existingPin; // Return existing PIN if already generated
+            }
+
+            // Generate a random 6-digit PIN
+            $pinCode = mt_rand(100000, 999999);
+
+            // Save the PIN to the class table
+            $stmt = $this->pdo->prepare("UPDATE class SET pin_code = :pin_code WHERE class_id = :class_id");
+            $stmt->execute([':pin_code' => $pinCode, ':class_id' => $class_id]);
+
+            return $pinCode;
+        } catch (PDOException $e) {
+            error_log("Error generating PIN: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    // Retrieve the generated PIN for a class
+    public function getPinCode($class_id)
+    {
+        try {
+            $stmt = $this->pdo->prepare("SELECT pin_code FROM class WHERE class_id = :class_id");
+            $stmt->execute([':class_id' => $class_id]);
+            return $stmt->fetchColumn();
+        } catch (PDOException $e) {
+            error_log("Error retrieving PIN: " . $e->getMessage());
+            return false;
+        }
     }
 }
 ?>

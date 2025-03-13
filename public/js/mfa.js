@@ -1,26 +1,24 @@
+
 document.addEventListener("DOMContentLoaded", function () {
     const inputs = document.querySelectorAll(".pin-input");
-    const form = document.getElementById("mfa-form");
+    const form = document.querySelector("form");
+    const errorMessage = document.getElementById("error-message");
 
+    // Auto-focus to next input & restrict to numbers
     inputs.forEach((input, index) => {
         input.addEventListener("input", (e) => {
-            const value = e.target.value;
-
-            // If non-numeric, show error and clear input
-            if (!/^\d$/.test(value)) {
-                e.target.value = "";
+            if (!/^\d$/.test(e.target.value)) {
+                e.target.value = ""; // Clear invalid input
                 showError("Only numbers are allowed!");
                 return;
             }
 
-            // Move to next input if valid digit entered
             if (index < inputs.length - 1) {
                 inputs[index + 1].focus();
             }
         });
 
         input.addEventListener("keydown", (e) => {
-            // Allow backspace to move to the previous input
             if (e.key === "Backspace" && !e.target.value && index > 0) {
                 inputs[index - 1].focus();
             }
@@ -29,43 +27,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Form validation before submission
     form.addEventListener("submit", function (e) {
-        let isValid = true;
+        let pin = "";
+        inputs.forEach(input => pin += input.value);
 
-        inputs.forEach(input => {
-            if (input.value === "") {
-                isValid = false;
-            }
-        });
-
-        if (!isValid) {
+        if (pin.length !== 6) {
             e.preventDefault();
-            showError("Please fill in all PIN fields.");
+            showError("Please enter all 6 digits.");
         }
-    });
 
-    // Resend PIN (Placeholder action)
-    // document.getElementById("resend-link").addEventListener("click", function (e) {
-    //     e.preventDefault();
-    //     alert("New PIN sent to your email!");
-    // });
+        document.getElementById("full-pin").value = pin; // Set hidden field value
+    });
 
     // Show error message
     function showError(message) {
-        let errorDiv = document.getElementById("error-message");
+        errorMessage.textContent = message;
+        errorMessage.style.display = "block";
 
-        if (!errorDiv) {
-            errorDiv = document.createElement("p");
-            errorDiv.id = "error-message";
-            errorDiv.classList.add("error-message");
-            form.appendChild(errorDiv);
-        }
-
-        errorDiv.textContent = message;
-        errorDiv.style.display = "block";
-
-        // Remove error message after 3 seconds
         setTimeout(() => {
-            errorDiv.style.display = "none";
+            errorMessage.style.display = "none";
         }, 3000);
     }
 });
+

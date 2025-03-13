@@ -15,6 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['mark_attendance'])) {
     exit();
 }
 
+// Handle PIN generation request
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['generate_pin'])) {
+    $generatedPin = $studentClass->generatePinCode($class_id);
+}
+
+
 // Fetch attendance records
 $attendanceRecords = $studentClass->getAttendanceRecords($class_id);
 
@@ -33,6 +39,21 @@ $students = $studentClass->getStudentsByClass($class_id);
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Font Awesome -->
 </head>
+<style>
+    .export-btn {
+        background-color: #28a745;
+        color: white;
+        padding: 10px 15px;
+        text-decoration: none;
+        border-radius: 5px;
+        display: inline-block;
+        margin-bottom: 15px;
+    }
+
+    .export-btn:hover {
+        background-color: #218838;
+    }
+</style>
 
 <body>
     <div class="container">
@@ -42,6 +63,23 @@ $students = $studentClass->getStudentsByClass($class_id);
         <a href="classManage.php" class="btn back-btn">
             <i class="fas fa-arrow-left"></i> Back to Classes
         </a>
+        <!-- Export to Excel Button -->
+        <a href="exportAttendance.php?class_id=<?= $class_id; ?>" class="btn export-btn">
+            <i class="fas fa-file-excel"></i> Export to Excel
+        </a>
+        <!-- Generate PIN Code Button -->
+        <form method="POST" action="">
+            <button type="submit" name="generate_pin" class="btn generate-btn">
+                <i class="fas fa-key"></i> Generate PIN
+            </button>
+        </form>
+
+        <!-- Display the Generated PIN -->
+        <?php if (isset($generatedPin)): ?>
+            <p class="pin-display">Generated PIN: <strong><?= $generatedPin; ?></strong></p>
+        <?php else: ?>
+            <p class="pin-display">Current PIN: <strong><?= $studentClass->getPinCode($class_id); ?></strong></p>
+        <?php endif; ?>
 
         <!-- Attendance Records Table -->
         <table class="schedule-table">

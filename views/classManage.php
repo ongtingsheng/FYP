@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../public/css/error.css">
     <link rel="stylesheet" href="../public/css/table.css">
     <link rel="stylesheet" href="../public/css/addStudentClass.css">
+    <link rel="stylesheet" href="../public/css/nav.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="../public/js/classManage.js"></script>
     <script src="../public/js/error.js"></script>
@@ -94,10 +95,20 @@ if (isset($_GET['success'])) {
 ?>
 
 <body>
+    <nav class="navbar">
+        <div class="nav-logo">
+            <h2>EasyClass</h2>
+        </div>
+        <ul class="nav-links">
+            <li><a href="dashboard.php"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="classManage.php" class="active"><i class="fas fa-chalkboard-teacher"></i> Classes</a></li>
+            <li><a href="#"><i class="fas fa-user"></i> User</a></li>
+            <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </nav>
     <div class="container">
         <h1 class="header">Class <span class="highlight">Management</span></h1>
         <div class="actions">
-            <button class="btn export">Export to Excel</button>
             <button class="btn add" id="openAddClass">+ Add New Class</button>
 
             <!-- <button class="btn import">Import from CSV</button> -->
@@ -147,7 +158,7 @@ if (isset($_GET['success'])) {
                                     </button>
                                     <a href="attendanceRecord.php?class_id=<?= $class['class_id']; ?>"
                                         class="action-btn view-btn">
-                                        <i class="fas fa-eye"></i>
+                                        <i class="fas fa-calendar-check"></i>
                                     </a>
                                     <button class="edit-btn" data-id="<?= $class['class_id']; ?>"
                                         data-name="<?= $class['class_name']; ?>" data-subject="<?= $class['subject']; ?>"
@@ -198,11 +209,14 @@ if (isset($_GET['success'])) {
                     <div class="form-group">
                         <input type="number" name="capacity" placeholder="Capacity" required>
                     </div>
+                    <div class="form-group">
+                        <input type="number" name="total_classes" placeholder="Total Classes" required>
+                    </div>
 
                     <!-- Schedule Section -->
                     <div class="form-group">
                         <label for="scheduleDays">First Day:</label>
-                        <select name="first_day" id="scheduleDays" multiple required>
+                        <select name="first_day" id="scheduleDays">
                             <option value="Mon">Monday</option>
                             <option value="Tue">Tuesday</option>
                             <option value="Wed">Wednesday</option>
@@ -214,7 +228,7 @@ if (isset($_GET['success'])) {
                     </div>
                     <div class="form-group">
                         <label for="scheduleDays">Last Day:</label>
-                        <select name="last_day" id="scheduleDays" multiple required>
+                        <select name="last_day" id="scheduleDays">
                             <option value="Mon">Monday</option>
                             <option value="Tue">Tuesday</option>
                             <option value="Wed">Wednesday</option>
@@ -278,6 +292,9 @@ if (isset($_GET['success'])) {
                 <div class="form-group">
                     <label>Capacity</label>
                     <input type="number" name="capacity" id="editClassCapacity">
+                </div>
+                <div class="form-group">
+                    <input type="number" name="total_classes" placeholder="Total Classes" required>
                 </div>
 
                 <!-- Schedule Section -->

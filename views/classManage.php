@@ -100,7 +100,7 @@ if (isset($_GET['success'])) {
             <h2>EasyClass</h2>
         </div>
         <ul class="nav-links">
-            <li><a href="dashboard.php"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="dashboard.php"><i class="fas fa-home"></i> Dashboard</a></li>
             <li><a href="classManage.php" class="active"><i class="fas fa-chalkboard-teacher"></i> Classes</a></li>
             <li><a href="#"><i class="fas fa-user"></i> User</a></li>
             <li><a href="logout.php"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
